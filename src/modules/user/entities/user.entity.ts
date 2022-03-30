@@ -1,4 +1,4 @@
-import { IUserRoles, UserRole } from "../models/user.models";
+import { UserTypes } from "../models/user.models";
 import { Exclude } from "class-transformer";
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Role } from "../../roles/entities/role.entity";
@@ -30,9 +30,12 @@ export class User {
   @Column()
   phone: string;
 
-  @ManyToOne(() => Role, role => role.id)
-  @JoinColumn({name: 'type'})
-  type: number;
+  @Column({
+    type: "enum",
+    enum: UserTypes,
+    default: UserTypes.USER
+  })
+  type: string;
 
   @Column({
     type: "date",
@@ -47,4 +50,8 @@ export class User {
     default: new Date()
   })
   updatedAt: Date;
+
+  @ManyToOne(() => Role, role => role.id, {nullable: false})
+  @JoinColumn({name: 'role_id'})
+  roleId: number;
 }

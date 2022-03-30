@@ -5,3 +5,8 @@ export enum UserRole {
   SUPER_ADMIN = 'super_admin',
   USER = 'user'
 }
+
+export enum UserTypes {
+  DOCTOR = 'doctor',
+  USER = 'user'
+}
