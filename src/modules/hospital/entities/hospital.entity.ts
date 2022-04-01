@@ -1,5 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { User } from "../../user/entities/user.entity";
+import { ApiProperty } from "@nestjs/swagger";
+import { IsDecimal, IsNotEmpty, IsString } from "class-validator";
 
 @Entity({
   name: "hospital"
@@ -8,19 +10,35 @@ export class Hospital {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
   @Column()
   name: string;
 
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
   @Column()
   address: string;
 
-  @Column()
+  @ApiProperty()
+  @IsDecimal()
+  @IsNotEmpty()
+  @Column({
+    type: "decimal"
+  })
   longitude: number;
 
-  @Column()
-  latitude: string;
+  @ApiProperty()
+  @IsDecimal()
+  @IsNotEmpty()
+  @Column({
+    type: "decimal"
+  })
+  latitude: number;
 
-  @ManyToOne(() => User, user => user.id)
+  @ManyToOne(() => User, user => user.id, {nullable: false})
   @JoinColumn({name: "created_by"})
   createdBy: number;
 

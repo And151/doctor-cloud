@@ -24,10 +24,11 @@ export class RolesGuard implements CanActivate {
     let user;
     try {
       user = this.jwtService.verify(bearerToken.slice(7));
+      request.params.user = user;
     } catch (e) {
       throw new UnauthorizedException();
     }
-    if (!roles.includes(user.type)) {
+    if (!roles.includes(user.roleId)) {
       throw new UnauthorizedException();
     }
     return true;
