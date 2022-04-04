@@ -13,6 +13,9 @@ import { Hospital } from "./entities/hospital.entity";
   ],
   providers: [
     HospitalService
+  ],
+  exports: [
+    HospitalService
   ]
 })
 export class HospitalModule {
