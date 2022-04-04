@@ -1,26 +1,36 @@
-import { Injectable } from '@nestjs/common';
-import { CreateUniversityDto } from './dto/create-university.dto';
-import { UpdateUniversityDto } from './dto/update-university.dto';
+import { Injectable } from "@nestjs/common";
+import { CreateUniversityDto } from "./dto/create-university.dto";
+import { UpdateUniversityDto } from "./dto/update-university.dto";
+import { InjectRepository } from "@nestjs/typeorm";
+import { University } from "./entities/university.entity";
+import { Repository } from "typeorm/repository/Repository";
 
 @Injectable()
 export class UniversityService {
+
+  constructor(
+    @InjectRepository(University)
+    private universityRepository: Repository<University>
+  ) {
+  }
+
   create(createUniversityDto: CreateUniversityDto) {
-    return 'This action adds a new university';
+    return this.universityRepository.create(createUniversityDto);
   }
 
   findAll() {
-    return `This action returns all university`;
+    return this.universityRepository.find();
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} university`;
+    return this.universityRepository.findOneById(id);
   }
 
   update(id: number, updateUniversityDto: UpdateUniversityDto) {
-    return `This action updates a #${id} university`;
+    return this.universityRepository.update(id, updateUniversityDto);
   }
 
   remove(id: number) {
-    return `This action removes a #${id} university`;
+    return this.universityRepository.delete(id);
   }
 }
