@@ -15,4 +15,12 @@ export class AuthController {
     }
     return this.authService.login(email, password);
   }
+
+  @Post("refresh-access-token")
+  refreshAccessToken(@Body('accessToken') accessToken: string) {
+    if (!accessToken) {
+      throw new BadRequestException();
+    }
+    return this.authService.refreshAccessToken(accessToken);
+  }
 }
