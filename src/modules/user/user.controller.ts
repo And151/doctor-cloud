@@ -51,7 +51,7 @@ export class UserController {
     if (!user || !user.id) {
       throw new UnauthorizedException();
     }
-    return this.userService.findOne(user.id);
+    return this.userService.findOne(+user.id);
   }
 
   @Patch(":id")
