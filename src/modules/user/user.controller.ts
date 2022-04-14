@@ -6,7 +6,7 @@ import {
   NotFoundException,
   Param, ParseIntPipe,
   Patch,
-  Post,
+  Post, UnauthorizedException,
   UseGuards,
   UseInterceptors
 } from "@nestjs/common";
@@ -44,6 +44,14 @@ export class UserController {
   @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN)
   async findOne(@Param("id", ParseIntPipe) id: number): Promise<User> {
     return this.userService.findOne(id);
+  }
+
+  @Get("current")
+  async getByToken(@Param("user") user: { id: number; roleId: number }) {
+    if (!user || !user.id) {
+      throw new UnauthorizedException();
+    }
+    return this.userService.findOne(user.id);
   }
 
   @Patch(":id")
