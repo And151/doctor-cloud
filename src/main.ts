@@ -3,7 +3,7 @@ import { AppModule } from "./app.module";
 import { CorsOptions } from "@nestjs/common/interfaces/external/cors-options.interface";
 
 const corsOptions: CorsOptions = {
-  allowedHeaders: '*',
+  allowedHeaders: ['Content-Type', 'Accept', 'Authorization'],
   origin: 'http://localhost:4200',
   credentials: true,
   methods: ['POST', 'GET', 'PATCH', 'PUT', 'DELETE']
