@@ -1,14 +1,15 @@
 import {
-  Body, ClassSerializerInterceptor,
+  Body,
   Controller,
   Delete,
   Get,
   NotFoundException,
-  Param, ParseIntPipe,
+  Param,
+  ParseIntPipe,
   Patch,
-  Post, UnauthorizedException,
-  UseGuards,
-  UseInterceptors
+  Post,
+  UnauthorizedException,
+  UseGuards
 } from "@nestjs/common";
 import { UserService } from "./user.service";
 import { CreateUserDto } from "./dto/create-user.dto";
@@ -24,6 +25,15 @@ import { UpdateResult } from "typeorm";
 @UseGuards(RolesGuard)
 export class UserController {
   constructor(private readonly userService: UserService) {
+  }
+
+  @Get("current")
+  @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.USER)
+  async getByToken(@Param("user") user: {id: number; roleId: number}) {
+    if (!user || !user.id) {
+      throw new UnauthorizedException();
+    }
+    return this.userService.findOne(+user.id);
   }
 
   @Post()
@@ -44,14 +54,6 @@ export class UserController {
   @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN)
   async findOne(@Param("id", ParseIntPipe) id: number): Promise<User> {
     return this.userService.findOne(id);
-  }
-
-  @Get("current")
-  async getByToken(@Param("user") user: { id: number; roleId: number }) {
-    if (!user || !user.id) {
-      throw new UnauthorizedException();
-    }
-    return this.userService.findOne(+user.id);
   }
 
   @Patch(":id")
