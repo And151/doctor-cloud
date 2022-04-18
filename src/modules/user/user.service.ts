@@ -6,6 +6,8 @@ import { UserHelper } from "../../helpers/user.helper";
 import { Repository } from "typeorm/repository/Repository";
 import { InjectRepository } from "@nestjs/typeorm";
 import { DeleteResult, UpdateResult } from "typeorm";
+import { Role } from "../roles/entities/role.entity";
+import { UserRole, UserTypes } from "./models/user.models";
 
 @Injectable()
 export class UserService {
@@ -23,6 +25,15 @@ export class UserService {
 
   findAll(): Promise<User[]> {
     return this.userRepository.find();
+  }
+
+  findAllDoctors(): Promise<User[]> {
+    return this.userRepository.find({
+      where: {
+        roleId: UserRole.USER,
+        type: UserTypes.DOCTOR
+      }
+    });
   }
 
   findOne(id: number): Promise<User> {

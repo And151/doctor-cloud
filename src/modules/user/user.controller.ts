@@ -50,6 +50,12 @@ export class UserController {
     return this.userService.findAll();
   }
 
+  @Get('/doctors')
+  @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.USER)
+  findAllDoctors() {
+    return this.userService.findAllDoctors();
+  }
+
   @Get(":id")
   @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN)
   async findOne(@Param("id", ParseIntPipe) id: number): Promise<User> {
