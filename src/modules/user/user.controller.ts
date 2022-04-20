@@ -18,7 +18,7 @@ import { User } from "./entities/user.entity";
 import { ValidationPipe } from "../../pipes/validation.pipe";
 import { RolesGuard } from "../../guards/roles.guard";
 import { Roles } from "../../decorators/roles.decorators";
-import { UserRole } from "./models/user.models";
+import { UserRole, UserTypes } from "./models/user.models";
 import { UpdateResult } from "typeorm";
 
 @Controller("user")
@@ -29,7 +29,7 @@ export class UserController {
 
   @Get("current")
   @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.USER)
-  async getByToken(@Param("user") user: {id: number; roleId: number}) {
+  async getByToken(@Param("user") user: { id: number; roleId: number }) {
     if (!user || !user.id) {
       throw new UnauthorizedException();
     }
@@ -50,10 +50,20 @@ export class UserController {
     return this.userService.findAll();
   }
 
-  @Get('/doctors')
+  @Get("/doctors")
   @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.USER)
   findAllDoctors() {
     return this.userService.findAllDoctors();
+  }
+
+  @Get("/doctors/:id")
+  @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.USER)
+  async findDoctor(@Param("id", ParseIntPipe) id: number) {
+    const user: User = await this.userService.findOne(id);
+    if (user.type !== UserTypes.DOCTOR || user.roleId !== UserRole.USER) {
+      throw new NotFoundException();
+    }
+    return user;
   }
 
   @Get(":id")
