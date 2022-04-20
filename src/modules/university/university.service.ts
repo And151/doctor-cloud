@@ -15,7 +15,7 @@ export class UniversityService {
   }
 
   create(createUniversityDto: CreateUniversityDto) {
-    return this.universityRepository.create(createUniversityDto);
+    return this.universityRepository.save(createUniversityDto);
   }
 
   findAll() {

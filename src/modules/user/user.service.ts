@@ -6,7 +6,6 @@ import { UserHelper } from "../../helpers/user.helper";
 import { Repository } from "typeorm/repository/Repository";
 import { InjectRepository } from "@nestjs/typeorm";
 import { DeleteResult, UpdateResult } from "typeorm";
-import { Role } from "../roles/entities/role.entity";
 import { UserRole, UserTypes } from "./models/user.models";
 
 @Injectable()
