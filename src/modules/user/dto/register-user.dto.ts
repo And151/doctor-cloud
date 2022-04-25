@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsEmail, IsEnum, IsNotEmpty, IsOptional, IsString, MinLength } from "class-validator";
+import { IsEmail, IsEmpty, IsEnum, IsNotEmpty, IsOptional, IsString, MinLength } from "class-validator";
 import { UserTypes } from "../models/user.models";
 
 export class RegisterUserDto {
@@ -38,4 +38,12 @@ export class RegisterUserDto {
   @ApiProperty()
   @IsOptional()
   roleId?: number;
+
+  @ApiProperty()
+  @IsEmpty()
+  isApproved: boolean;
+
+  @ApiProperty()
+  @IsEmpty()
+  confirmationCode: string;
 }

@@ -8,13 +8,15 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { DeleteResult, UpdateResult } from "typeorm";
 import { UserRole, UserTypes } from "./models/user.models";
 import { RegisterUserDto } from "./dto/register-user.dto";
+import { MailerService } from "@nestjs-modules/mailer";
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
-    private userHelper: UserHelper
+    private userHelper: UserHelper,
+    private readonly mailerService: MailerService
   ) {
   }
 
@@ -36,7 +38,8 @@ export class UserService {
       where: {
         roleId: UserRole.USER,
         type: UserTypes.DOCTOR
-      }
+      },
+      relations: ["hospital"]
     });
   }
 
@@ -70,5 +73,15 @@ export class UserService {
       throw new BadRequestException("User with email already exists.");
     }
     return this.userRepository.save(registerUserDto);
+  }
+
+  sendApprovalEmail(email: string, confirmationCode: string) {
+    return this.mailerService.sendMail({
+      to: email, // list of receivers
+      from: 'noreply@doctor.cloud', // sender address
+      subject: 'Confirmation Code', // Subject line
+      text: `Your confirmation code is ${confirmationCode}`, // plaintext body
+      html: '<b>welcome</b>', // HTML body content
+    });
   }
 }

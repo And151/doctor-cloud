@@ -1,7 +1,8 @@
 import { UserTypes } from "../models/user.models";
 import { Exclude } from "class-transformer";
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToMany, ManyToOne, PrimaryGeneratedColumn, JoinTable } from "typeorm";
 import { Role } from "../../roles/entities/role.entity";
+import { Hospital } from "../../hospital/entities/hospital.entity";
 
 @Entity({
   name: "user"
@@ -51,13 +52,30 @@ export class User {
   })
   updatedAt: Date;
 
-  @ManyToOne(() => Role, role => role.id, {nullable: false})
-  @JoinColumn({name: 'role_id'})
-  role: Role;
-
   @Column({
     nullable: false,
-    name: 'role_id'
+    name: "role_id"
   })
   roleId: number;
+
+  @Column({
+    default: true,
+    nullable: false,
+    name: "is_approved"
+  })
+  isApproved: boolean
+
+  @Column({
+    nullable: true,
+    name: "confirmation_code"
+  })
+  confirmationCode: string;
+
+  @ManyToOne(() => Role, role => role.id, { nullable: false })
+  @JoinColumn({ name: "role_id" })
+  role: Role;
+
+  @ManyToMany(() => Hospital)
+  @JoinTable()
+  hospital: Hospital[];
 }

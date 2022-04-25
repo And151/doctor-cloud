@@ -21,7 +21,7 @@ export class HospitalDoctorsService {
 
   async create(createHospitalDoctorDto: CreateHospitalDoctorDto) {
     const hospital = await this.hospitalService.findOne(createHospitalDoctorDto.hospitalId);
-    const doctor = await this.userService.findOne(createHospitalDoctorDto.doctorId);
+    const doctor = await this.userService.findOne(createHospitalDoctorDto.userId);
     if (!hospital || !doctor || doctor.type !== UserTypes.DOCTOR) {
       throw new BadRequestException();
     }
@@ -40,9 +40,9 @@ export class HospitalDoctorsService {
     return `This action updates a #${id} hospitalDoctor`;
   }
 
-  remove(hospitalId: number, doctorId: number) {
+  remove(hospitalId: number, userId: number) {
     return this.hospitalDoctorRepo.delete({
-      doctorId,
+      userId,
       hospitalId
     });
   }

@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -21,6 +22,8 @@ import { Roles } from "../../decorators/roles.decorators";
 import { UserRole, UserTypes } from "./models/user.models";
 import { UpdateResult } from "typeorm";
 import { RegisterUserDto } from "./dto/register-user.dto";
+import { randomUUID } from "crypto";
+import { SuccessHttpCode } from "../../http-codes/success.http-code";
 
 @Controller("user")
 @UseGuards(RolesGuard)
@@ -51,7 +54,23 @@ export class UserController {
   ) {
     registerUserDto.type = UserTypes.USER;
     registerUserDto.roleId = UserRole.USER;
-    return this.userService.register(registerUserDto);
+    registerUserDto.isApproved = false;
+    registerUserDto.confirmationCode = randomUUID();
+    const user = await this.userService.register(registerUserDto);
+    if (user?.id) {
+      const emailRes = await this.userService.sendApprovalEmail(user.email, user.confirmationCode);
+      console.log(emailRes);
+      if (emailRes) {
+        return SuccessHttpCode.emailSent();
+      } else {
+        console.log('delete');
+        await this.userService.remove(user.id);
+        console.log('deleted');
+        throw new BadRequestException("Not Registered.");
+      }
+    } else {
+      throw new BadRequestException("Not Registered.");
+    }
   }
 
   @Get()

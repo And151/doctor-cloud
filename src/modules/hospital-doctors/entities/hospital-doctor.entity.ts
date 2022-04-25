@@ -1,19 +1,18 @@
-import { Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Entity, JoinColumn, ManyToOne, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 import { Hospital } from "../../hospital/entities/hospital.entity";
 import { User } from "../../user/entities/user.entity";
 
 @Entity({
-  name: "hospital_doctors"
+  name: "user_hospital_hospital"
 })
 export class HospitalDoctor {
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @ManyToOne(() => Hospital, hospital => hospital.id)
-  @JoinColumn({name: "hospital_id"})
-  hospitalId: number;
-
+  @PrimaryColumn({ primary: false })
   @ManyToOne(() => User, user => user.id)
-  @JoinColumn({name: "doctor_id"})
-  doctorId: number;
+  @JoinColumn({ name: "userId" })
+  userId: number;
+
+  @PrimaryColumn({ primary: false })
+  @ManyToOne(() => Hospital, hospital => hospital.id)
+  @JoinColumn({ name: "hospitalId" })
+  hospitalId: number;
 }

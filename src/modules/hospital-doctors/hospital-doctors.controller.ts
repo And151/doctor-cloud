@@ -37,9 +37,9 @@ export class HospitalDoctorsController {
   @Roles(UserRole.SUPER_ADMIN, UserRole.ADMIN)
   async remove(
     @Param("hospitalId", ParseIntPipe) hospitalId: number,
-    @Query("doctorId", ParseIntPipe) doctorId: number
+    @Query("userId", ParseIntPipe) userId: number
   ) {
-    const res = await this.hospitalDoctorsService.remove(hospitalId, doctorId);
+    const res = await this.hospitalDoctorsService.remove(hospitalId, userId);
     return !!res.affected;
   }
 }
