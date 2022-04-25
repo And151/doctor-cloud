@@ -66,6 +66,7 @@ export class HospitalController {
   }
 
   @Delete(":id")
+  @Roles(UserRole.SUPER_ADMIN)
   remove(@Param("id", ParseIntPipe) id: number) {
     return this.hospitalService.remove(id);
   }
