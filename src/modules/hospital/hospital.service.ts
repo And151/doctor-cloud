@@ -30,6 +30,6 @@ export class HospitalService {
   }
 
   remove(id: number) {
-    return `This action removes a #${id} hospital`;
+    return this.hospitalRepository.delete(id);
   }
 }

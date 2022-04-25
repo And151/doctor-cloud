@@ -7,6 +7,7 @@ import { Repository } from "typeorm/repository/Repository";
 import { InjectRepository } from "@nestjs/typeorm";
 import { DeleteResult, UpdateResult } from "typeorm";
 import { UserRole, UserTypes } from "./models/user.models";
+import { RegisterUserDto } from "./dto/register-user.dto";
 
 @Injectable()
 export class UserService {
@@ -60,5 +61,14 @@ export class UserService {
 
   isPasswordsMatched(pass: string, hashPass: string): Promise<boolean> {
     return this.userHelper.isPasswordMatch(pass, hashPass);
+  }
+
+  async register(registerUserDto: RegisterUserDto) {
+    registerUserDto.password = await this.userHelper.hashPassword(registerUserDto.password);
+    const existingUser = await this.getUserByEmail(registerUserDto.email);
+    if (existingUser) {
+      throw new BadRequestException("User with email already exists.");
+    }
+    return this.userRepository.save(registerUserDto);
   }
 }

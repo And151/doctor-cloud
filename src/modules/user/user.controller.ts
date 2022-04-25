@@ -20,6 +20,7 @@ import { RolesGuard } from "../../guards/roles.guard";
 import { Roles } from "../../decorators/roles.decorators";
 import { UserRole, UserTypes } from "./models/user.models";
 import { UpdateResult } from "typeorm";
+import { RegisterUserDto } from "./dto/register-user.dto";
 
 @Controller("user")
 @UseGuards(RolesGuard)
@@ -42,6 +43,15 @@ export class UserController {
     @Body(new ValidationPipe()) createUserDto: CreateUserDto
   ) {
     return await this.userService.create(createUserDto);
+  }
+
+  @Post("/register")
+  async register(
+    @Body(new ValidationPipe()) registerUserDto: RegisterUserDto
+  ) {
+    registerUserDto.type = UserTypes.USER;
+    registerUserDto.roleId = UserRole.USER;
+    return this.userService.register(registerUserDto);
   }
 
   @Get()
