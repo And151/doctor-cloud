@@ -33,13 +33,13 @@ export class HospitalDoctorsController {
     return this.hospitalDoctorsService.update(+id, updateHospitalDoctorDto);
   }
 
-  @Delete(":hospitalId")
+  @Delete(":userId")
   @Roles(UserRole.SUPER_ADMIN, UserRole.ADMIN)
   async remove(
-    @Param("hospitalId", ParseIntPipe) hospitalId: number,
-    @Query("userId", ParseIntPipe) userId: number
+    @Param("userId", ParseIntPipe) userId: number,
+    @Body("hospitalIds") hospitalIds: number[]
   ) {
-    const res = await this.hospitalDoctorsService.remove(hospitalId, userId);
+    const res = await this.hospitalDoctorsService.remove(hospitalIds, userId);
     return !!res.affected;
   }
 }

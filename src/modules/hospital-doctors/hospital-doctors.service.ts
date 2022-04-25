@@ -7,6 +7,7 @@ import { Repository } from "typeorm/repository/Repository";
 import { HospitalService } from "../hospital/hospital.service";
 import { UserService } from "../user/user.service";
 import { UserTypes } from "../user/models/user.models";
+import { In } from "typeorm";
 
 @Injectable()
 export class HospitalDoctorsService {
@@ -40,10 +41,10 @@ export class HospitalDoctorsService {
     return `This action updates a #${id} hospitalDoctor`;
   }
 
-  remove(hospitalId: number, userId: number) {
+  remove(hospitalIds: number[], userId: number) {
     return this.hospitalDoctorRepo.delete({
       userId,
-      hospitalId
+      hospitalId: In(hospitalIds)
     });
   }
 }
