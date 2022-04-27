@@ -12,6 +12,7 @@ import { UniversityModule } from './modules/university/university.module';
 import { DoctorEducationModule } from './modules/doctor-education/doctor-education.module';
 import { ProfessionsModule } from './modules/professions/professions.module';
 import { DoctorProfessionsModule } from './modules/doctor-professions/doctor-professions.module';
+import { AnalyticsModule } from './modules/analytics/analytics.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { DoctorProfessionsModule } from './modules/doctor-professions/doctor-pro
     DoctorEducationModule,
     ProfessionsModule,
     DoctorProfessionsModule,
+    AnalyticsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

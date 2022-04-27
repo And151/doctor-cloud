@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, UseGuards } from "@nestjs/common";
 import { HospitalDoctorsService } from "./hospital-doctors.service";
 import { CreateHospitalDoctorDto } from "./dto/create-hospital-doctor.dto";
 import { UpdateHospitalDoctorDto } from "./dto/update-hospital-doctor.dto";

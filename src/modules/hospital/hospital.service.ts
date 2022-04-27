@@ -21,6 +21,10 @@ export class HospitalService {
     return this.hospitalRepository.find();
   }
 
+  count() {
+    return this.hospitalRepository.count();
+  }
+
   findOne(id: number) {
     return this.hospitalRepository.findOneById(id);
   }

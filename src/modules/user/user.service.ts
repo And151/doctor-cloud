@@ -78,10 +78,26 @@ export class UserService {
   sendApprovalEmail(email: string, confirmationCode: string) {
     return this.mailerService.sendMail({
       to: email, // list of receivers
-      from: 'noreply@doctor.cloud', // sender address
-      subject: 'Confirmation Code', // Subject line
+      from: "noreply@doctor.cloud", // sender address
+      subject: "Confirmation Code", // Subject line
       text: `Your confirmation code is ${confirmationCode}`, // plaintext body
-      html: '<b>welcome</b>', // HTML body content
+      html: "<b>welcome</b>" // HTML body content
+    });
+  }
+
+  async doctorsCount() {
+    return this.userRepository.count({
+      where: {
+        type: UserTypes.DOCTOR
+      }
+    });
+  }
+
+  async patientsCount() {
+    return this.userRepository.count({
+      where: {
+        type: UserTypes.DOCTOR
+      }
     });
   }
 }
