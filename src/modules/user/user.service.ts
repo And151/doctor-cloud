@@ -33,12 +33,14 @@ export class UserService {
     return this.userRepository.find();
   }
 
-  findAllDoctors(): Promise<User[]> {
+  findAllDoctors(limit?: number, offset?: number): Promise<User[]> {
     return this.userRepository.find({
       where: {
         roleId: UserRole.USER,
         type: UserTypes.DOCTOR
       },
+      take: limit,
+      skip: offset,
       relations: ["hospital"]
     });
   }
@@ -98,6 +100,16 @@ export class UserService {
       where: {
         type: UserTypes.DOCTOR
       }
+    });
+  }
+
+  findAllPatients(limit?: number, offset?: number) {
+    return this.userRepository.find({
+      where: {
+        type: UserTypes.USER
+      },
+      skip: offset,
+      take: limit
     });
   }
 }

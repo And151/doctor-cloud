@@ -8,7 +8,7 @@ import {
   Param,
   ParseIntPipe,
   Patch,
-  Post,
+  Post, Query,
   UnauthorizedException,
   UseGuards
 } from "@nestjs/common";
@@ -63,9 +63,9 @@ export class UserController {
       if (emailRes) {
         return SuccessHttpCode.emailSent();
       } else {
-        console.log('delete');
+        console.log("delete");
         await this.userService.remove(user.id);
-        console.log('deleted');
+        console.log("deleted");
         throw new BadRequestException("Not Registered.");
       }
     } else {
@@ -79,10 +79,34 @@ export class UserController {
     return this.userService.findAll();
   }
 
+  @Get("/patients")
+  @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN)
+  findAllPatients(
+    @Query("limit") limit?: number,
+    @Query("offset") offset?: number
+  ) {
+    return this.userService.findAllPatients(limit, offset);
+  }
+
+  @Get("/patients/:id")
+  @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN)
+  async findPatientById(
+    @Param("id", ParseIntPipe) id: number
+  ) {
+    const user: User = await this.userService.findOne(id);
+    if (user.type !== UserTypes.USER || user.roleId !== UserRole.USER) {
+      throw new NotFoundException();
+    }
+    return user;
+  }
+
   @Get("/doctors")
   @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.USER)
-  findAllDoctors() {
-    return this.userService.findAllDoctors();
+  findAllDoctors(
+    @Query("limit") limit?: number,
+    @Query("offset") offset?: number
+  ) {
+    return this.userService.findAllDoctors(limit, offset);
   }
 
   @Get("/doctors/:id")
