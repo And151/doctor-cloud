@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -8,7 +7,8 @@ import {
   Param,
   ParseIntPipe,
   Patch,
-  Post, Query,
+  Post,
+  Query,
   UnauthorizedException,
   UseGuards
 } from "@nestjs/common";
@@ -32,9 +32,32 @@ export class UserController {
   @Post("admin")
   @Roles(UserRole.SUPER_ADMIN)
   async createAdmin(@Body(new ValidationPipe()) createUserDto: CreateUserDto) {
-
+    createUserDto.roleId = UserRole.ADMIN;
+    createUserDto.type = UserTypes.DOCTOR;
+    return this.userService.create(createUserDto);
   }
 
+  @Get("admin")
+  @Roles(UserRole.SUPER_ADMIN)
+  async getAdminUsers(
+    @Query("limit") limit?: number,
+    @Query("offset") offset?: number
+  ) {
+    return this.userService.findAllAdmins(limit, offset);
+  }
+
+  @Patch("admin/:id")
+  async updateAdmin(
+    @Param("id", ParseIntPipe) id: number,
+    @Body(new ValidationPipe()) updateUserDto: UpdateUserDto) {
+    updateUserDto.type = UserTypes.DOCTOR;
+    updateUserDto.roleId = UserRole.ADMIN;
+    const res: UpdateResult = await this.userService.update(id, updateUserDto);
+    if (!res.affected) {
+      throw new NotFoundException();
+    }
+    return true;
+  }
 
   @Get("current")
   @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.USER)

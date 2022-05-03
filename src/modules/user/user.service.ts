@@ -112,4 +112,14 @@ export class UserService {
       take: limit
     });
   }
+
+  findAllAdmins(limit: number, offset: number) {
+    return this.userRepository.find({
+      where: {
+        roleId: UserRole.ADMIN
+      },
+      skip: offset,
+      take: limit
+    });
+  }
 }
