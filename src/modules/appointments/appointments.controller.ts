@@ -1,11 +1,25 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query, UseGuards } from "@nestjs/common";
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Delete,
+  Get,
+  NotFoundException,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+  Query,
+  UseGuards
+} from "@nestjs/common";
 import { AppointmentsService } from "./appointments.service";
 import { CreateAppointmentDto } from "./dto/create-appointment.dto";
 import { UpdateAppointmentDto } from "./dto/update-appointment.dto";
 import { RolesGuard } from "../../guards/roles.guard";
 import { Roles } from "../../decorators/roles.decorators";
-import { UserRole } from "../user/models/user.models";
+import { UserRole, UserTypes } from "../user/models/user.models";
 import { ValidationPipe } from "../../pipes/validation.pipe";
+import { User } from "../user/entities/user.entity";
 
 @Controller("appointments")
 @UseGuards(RolesGuard)
@@ -16,6 +30,7 @@ export class AppointmentsController {
   @Post()
   @Roles(UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.USER)
   create(@Body(new ValidationPipe()) createAppointmentDto: CreateAppointmentDto) {
+    createAppointmentDto.is_approved = false;
     return this.appointmentsService.create(createAppointmentDto);
   }
 
@@ -30,16 +45,25 @@ export class AppointmentsController {
 
   @Get(":id")
   @Roles(UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.USER)
-  findOne(@Param("id") id: string) {
-    return this.appointmentsService.findOne(+id);
+  async findOne(@Param("id") id: string) {
+    const res = await this.appointmentsService.findOne(+id);
+    if (res?.length) {
+      return res[0];
+    } else {
+      throw new NotFoundException();
+    }
   }
 
   @Patch(":id")
   @Roles(UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.USER)
   update(
     @Param("id", ParseIntPipe) id: number,
-    @Body(new ValidationPipe()) updateAppointmentDto: UpdateAppointmentDto
+    @Body(new ValidationPipe()) updateAppointmentDto: UpdateAppointmentDto,
+    @Param("user") user: User
   ) {
+    if (user.type === UserTypes.USER) {
+      throw new BadRequestException();
+    }
     return this.appointmentsService.update(id, updateAppointmentDto);
   }
 

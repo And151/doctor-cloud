@@ -2,7 +2,7 @@ import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "t
 import { Hospital } from "../../hospital/entities/hospital.entity";
 import { User } from "../../user/entities/user.entity";
 import { ApiProperty } from "@nestjs/swagger";
-import { IsBoolean, IsDate, IsDecimal, IsNotEmpty } from "class-validator";
+import { IsBoolean, IsDate, IsDateString, IsDecimal, IsNotEmpty, IsNumber, IsOptional } from "class-validator";
 
 @Entity({
   name: "appointment"
@@ -12,51 +12,38 @@ export class Appointment {
   id: number;
 
   @ApiProperty()
-  @IsDecimal()
+  @IsNumber()
   @IsNotEmpty()
   @ManyToOne(() => User, user => user.id)
   @JoinColumn({name: "doctor_id"})
-  doctorId: number;
+  doctor: number;
 
   @ApiProperty()
-  @IsDecimal()
+  @IsNumber()
   @IsNotEmpty()
   @ManyToOne(() => User, user => user.id)
   @JoinColumn({name: "user_id"})
-  userId: number;
+  user: number;
 
   @ApiProperty()
-  @IsDecimal()
-  @IsNotEmpty()
+  @IsNumber()
+  @IsOptional()
   @ManyToOne(() => Hospital, hospital => hospital.id)
   @JoinColumn({name: "hospital_id"})
-  hospitalId: number;
+  hospital: number;
 
   @ApiProperty()
-  @IsDecimal()
-  @IsNotEmpty()
-  @Column()
-  fee: number;
-
-  @ApiProperty()
-  @IsDate()
+  @IsDateString()
   @IsNotEmpty()
   @Column({
-    type: "date"
+    type: "timestamp"
   })
   date: Date;
 
   @ApiProperty()
-  @IsDate()
-  @IsNotEmpty()
-  @Column({
-    type: "time"
-  })
-  time: Date;
-
-  @ApiProperty()
   @IsBoolean()
   @IsNotEmpty()
+  @IsOptional()
   @Column({
     default: false
   })

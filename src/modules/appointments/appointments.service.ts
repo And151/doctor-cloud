@@ -20,12 +20,18 @@ export class AppointmentsService {
   findAll(limit?: number, offset?: number) {
     return this.appointmentRepo.find({
       skip: offset,
-      take: limit
+      take: limit,
+      relations: ["doctor", "user", "hospital"]
     });
   }
 
   findOne(id: number) {
-    return this.appointmentRepo.findOneById(id);
+    return this.appointmentRepo.find({
+      where: {
+        id
+      },
+      relations: ["doctor", "user", "hospital"]
+    });
   }
 
   update(id: number, updateAppointmentDto: UpdateAppointmentDto) {

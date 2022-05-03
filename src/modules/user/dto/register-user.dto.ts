@@ -31,6 +31,11 @@ export class RegisterUserDto {
   password: string;
 
   @ApiProperty()
+  @IsString()
+  @IsOptional()
+  imageUrl: string;
+
+  @ApiProperty()
   @IsEnum(UserTypes)
   @IsOptional()
   type?: UserTypes;
@@ -38,12 +43,4 @@ export class RegisterUserDto {
   @ApiProperty()
   @IsOptional()
   roleId?: number;
-
-  @ApiProperty()
-  @IsEmpty()
-  isApproved: boolean;
-
-  @ApiProperty()
-  @IsEmpty()
-  confirmationCode: string;
 }

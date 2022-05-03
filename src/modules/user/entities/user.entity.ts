@@ -48,6 +48,12 @@ export class User {
   imageUrl: string;
 
   @Column({
+    nullable: true,
+    name: 'appointment_fee'
+  })
+  appointmentFee: number;
+
+  @Column({
     type: "enum",
     enum: UserTypes,
     default: UserTypes.USER
