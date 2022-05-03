@@ -54,23 +54,7 @@ export class UserController {
   ) {
     registerUserDto.type = UserTypes.USER;
     registerUserDto.roleId = UserRole.USER;
-    registerUserDto.isApproved = false;
-    registerUserDto.confirmationCode = randomUUID();
-    const user = await this.userService.register(registerUserDto);
-    if (user?.id) {
-      const emailRes = await this.userService.sendApprovalEmail(user.email, user.confirmationCode);
-      console.log(emailRes);
-      if (emailRes) {
-        return SuccessHttpCode.emailSent();
-      } else {
-        console.log("delete");
-        await this.userService.remove(user.id);
-        console.log("deleted");
-        throw new BadRequestException("Not Registered.");
-      }
-    } else {
-      throw new BadRequestException("Not Registered.");
-    }
+    return this.userService.register(registerUserDto);
   }
 
   @Get()

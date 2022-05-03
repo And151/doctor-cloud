@@ -58,23 +58,6 @@ export class User {
   })
   roleId: number;
 
-  @Column({
-    default: true,
-    nullable: false,
-    select: false,
-    name: "is_approved"
-  })
-  @Exclude()
-  isApproved: boolean
-
-  @Column({
-    nullable: true,
-    select: false,
-    name: "confirmation_code"
-  })
-  @Exclude()
-  confirmationCode: string;
-
   @ManyToOne(() => Role, role => role.id, { nullable: false })
   @JoinColumn({ name: "role_id" })
   role: Role;
