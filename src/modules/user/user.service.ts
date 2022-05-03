@@ -122,4 +122,17 @@ export class UserService {
       take: limit
     });
   }
+
+  getHospitalDoctors(hospitalId: number) {
+    return this.userRepository.find({
+      where: {
+        roleId: UserRole.USER,
+        type: UserTypes.DOCTOR,
+        hospital: {
+          id: hospitalId
+        }
+      },
+      relations: ["hospital"]
+    })
+  }
 }

@@ -130,6 +130,13 @@ export class UserController {
     return user;
   }
 
+  @Get("hospital/doctors/:hospitalId")
+  async getHospitalDoctors(
+    @Param("hospitalId", ParseIntPipe) hospitalId: number
+  ) {
+    return this.userService.getHospitalDoctors(hospitalId);
+  }
+
   @Get(":id")
   @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN)
   async findOne(@Param("id", ParseIntPipe) id: number): Promise<User> {
