@@ -34,6 +34,16 @@ export class AppointmentsController {
     return this.appointmentsService.create(createAppointmentDto);
   }
 
+  @Get("doctor")
+  @Roles(UserRole.USER)
+  async findDoctorAppointments(
+    @Param("user") user: User
+  ) {
+    const res = await this.appointmentsService.findDoctorAppointments(user.id);
+    // @ts-ignore
+    return res.filter(item => item.doctor.id === user.id);
+  }
+
   @Get()
   @Roles(UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.USER)
   findAll(

@@ -3,12 +3,14 @@ import { CreateAnalyticsDto } from './dto/create-analytics.dto';
 import { UpdateAnalyticsDto } from './dto/update-analytics.dto';
 import { HospitalService } from "../hospital/hospital.service";
 import { UserService } from "../user/user.service";
+import { AppointmentsService } from "../appointments/appointments.service";
 
 @Injectable()
 export class AnalyticsService {
   constructor(
     private hospitalService: HospitalService,
-    private userService: UserService
+    private userService: UserService,
+    private appointmentService: AppointmentsService
   ) {
   }
 
@@ -36,12 +38,12 @@ export class AnalyticsService {
     const hospitalsCount = await this.hospitalService.count();
     const doctorsCount = await this.userService.doctorsCount();
     const patientsCount = await this.userService.patientsCount();
-    // TODO: add bookedAppointmentsCount
+    const bookedAppointmentsCount = await this.appointmentService.count();
     return {
       hospitalsCount,
       doctorsCount,
       patientsCount,
-      bookedAppointmentsCount: -1
+      bookedAppointmentsCount
     }
   }
 }
