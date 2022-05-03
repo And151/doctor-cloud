@@ -32,6 +32,11 @@ export class User {
   phone: string;
 
   @Column({
+    name: "image_url"
+  })
+  imageUrl: string;
+
+  @Column({
     type: "enum",
     enum: UserTypes,
     default: UserTypes.USER

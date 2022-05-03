@@ -22,14 +22,19 @@ import { Roles } from "../../decorators/roles.decorators";
 import { UserRole, UserTypes } from "./models/user.models";
 import { UpdateResult } from "typeorm";
 import { RegisterUserDto } from "./dto/register-user.dto";
-import { randomUUID } from "crypto";
-import { SuccessHttpCode } from "../../http-codes/success.http-code";
 
 @Controller("user")
 @UseGuards(RolesGuard)
 export class UserController {
   constructor(private readonly userService: UserService) {
   }
+
+  @Post("admin")
+  @Roles(UserRole.SUPER_ADMIN)
+  async createAdmin() {
+
+  }
+
 
   @Get("current")
   @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.USER)

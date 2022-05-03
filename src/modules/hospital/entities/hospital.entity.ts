@@ -38,6 +38,11 @@ export class Hospital {
   })
   latitude: number;
 
+  @Column({
+    name: "image_url"
+  })
+  imageUrl: string;
+
   @ManyToOne(() => User, user => user.id, {nullable: false})
   @JoinColumn({name: "created_by"})
   createdBy: number;
