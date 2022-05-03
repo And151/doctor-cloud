@@ -31,7 +31,7 @@ export class UserController {
 
   @Post("admin")
   @Roles(UserRole.SUPER_ADMIN)
-  async createAdmin() {
+  async createAdmin(@Body(new ValidationPipe()) createUserDto: CreateUserDto) {
 
   }
 

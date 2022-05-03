@@ -38,8 +38,11 @@ export class Hospital {
   })
   latitude: number;
 
+  @ApiProperty()
+  @IsString()
   @Column({
-    name: "image_url"
+    name: "image_url",
+    nullable: true
   })
   imageUrl: string;
 

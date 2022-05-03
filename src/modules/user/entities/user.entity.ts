@@ -32,7 +32,8 @@ export class User {
   phone: string;
 
   @Column({
-    name: "image_url"
+    name: "image_url",
+    nullable: true
   })
   imageUrl: string;
 
