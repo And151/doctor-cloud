@@ -37,6 +37,11 @@ export class User {
   profession: string;
 
   @Column({
+    nullable: true
+  })
+  experience: number;
+
+  @Column({
     name: "image_url",
     nullable: true
   })
