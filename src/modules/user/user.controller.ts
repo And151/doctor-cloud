@@ -85,7 +85,6 @@ export class UserController {
   }
 
   @Get("/doctors")
-  @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.USER)
   findAllDoctors(
     @Query("limit") limit?: number,
     @Query("offset") offset?: number
